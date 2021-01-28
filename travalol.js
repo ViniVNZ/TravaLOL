@@ -43,6 +43,9 @@ async function main() {
       // Pegar o id usando usando o nick
       const pegarid = await api.get(`/lol-summoner/v1/summoners?name=${nick2}`);
 
+      if (pegarid.status >= 400)
+        return console.log('Não conseguir achar esse nick.');
+
       const summoneid = pegarid.data.summonerId;
 
       // Data pra enviar no post pra invita pra sala
@@ -56,9 +59,6 @@ async function main() {
           validateStatus: () => true,
         });
 
-        if (envia.status >= 400) {
-          throw new Error('Não conseguir invita, Reinicie o programa.');
-        }
         console.log(`Invite ${nick}, Status:`, envia.status);
 
         const recusa = await api({
@@ -66,10 +66,6 @@ async function main() {
           url: `/lol-lobby/v2/lobby/members/${summoneid}/kick`,
           validateStatus: () => true,
         });
-
-        if (recusa.status >= 400) {
-          throw new Error('Não conseguir da kick, Reinicie o programa.');
-        }
 
         console.log(`Kick ${nick}, Status:`, recusa.status);
         await delay(100);
