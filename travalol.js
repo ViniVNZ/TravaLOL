@@ -73,7 +73,7 @@ async function main() {
         });
 
         console.log(`Kick ${nick}, Status:`, recusa.status);
-        await delay(700);
+        await delay(500);
       } while (whileretu === false);
     });
   } catch (e) {
