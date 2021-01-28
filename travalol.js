@@ -41,10 +41,15 @@ async function main() {
       const nick2 = encodeURI(nick);
 
       // Pegar o id usando usando o nick
-      const pegarid = await api.get(`/lol-summoner/v1/summoners?name=${nick2}`);
+      const pegarid = await api({
+        method: 'GET',
+        url: `/lol-summoner/v1/summoners?name=${nick2}`,
+        validateStatus: () => true,
+      });
 
-      if (pegarid.status >= 400)
-        return console.log('Não conseguir achar esse nick.');
+      if (pegarid.status >= 400) {
+        throw new Error('Não conseguir achar esse nick, Sorry.');
+      }
 
       const summoneid = pegarid.data.summonerId;
 
